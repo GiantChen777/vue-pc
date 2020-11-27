@@ -1,14 +1,21 @@
 <template>
   <div>
-    <h1>1111</h1>
+    <Header />
+    <!-- 显示组件 -->
+    <router-view></router-view>
+    <Footer />
   </div>
 </template>
 
 <script>
+import Header from './components/Headers'
+import Footer from './components/Footer'
+
 export default {
   name: 'App',
-  data() {
-    return {}
+  components: {
+    Header,
+    Footer,
   },
 }
 </script>
