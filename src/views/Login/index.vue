@@ -1,57 +1,75 @@
 <template>
-  <div class="login">
-    <div class="login-center">
-      <div class="login-warp">
-        <div class="login-from">
-          <ul class="tab clearFix">
+  <div>
+    <div class="login">
+      <div class="login-center">
+        <div class="login-warp">
+          <div class="login-from">
+            <ul class="tab clearFix">
+              <li>
+                <a href="##" style="border-right: 0">扫描登录</a>
+              </li>
+              <li>
+                <a href="##" class="current">账户登录</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottem">
+        <div class="footer-ul">
+          <ul>
             <li>
-              <a href="##" style="border-right: 0">扫描登录</a>
+              <a href="###">关于我们</a>
             </li>
             <li>
-              <a href="##" class="current">账户登录</a>
+              <a href="###">联系我们</a>
+            </li>
+            <li>
+              <a href="###">联系客服</a>
+            </li>
+            <li>
+              <a href="###">商家入驻</a>
+            </li>
+            <li>
+              <a href="###">营销中心</a>
+            </li>
+            <li>
+              <a href="###">手机尚品汇</a>
+            </li>
+            <li>
+              <a href="###">尚品汇社区</a>
+            </li>
+            <li>
+              <a href="###">关于我们</a>
             </li>
           </ul>
         </div>
+        <div class="address">地址：北京市昌平区宏福科技园综合楼6层</div>
+        <div class="beian">京ICP备19006430号</div>
       </div>
     </div>
-    <div class="footer-bottem">
-      <div class="footer-ul">
-        <ul>
-          <li>
-            <a href="###">关于我们</a>
-          </li>
-          <li>
-            <a href="###">联系我们</a>
-          </li>
-          <li>
-            <a href="###">联系客服</a>
-          </li>
-          <li>
-            <a href="###">商家入驻</a>
-          </li>
-          <li>
-            <a href="###">营销中心</a>
-          </li>
-          <li>
-            <a href="###">手机尚品汇</a>
-          </li>
-          <li>
-            <a href="###">尚品汇社区</a>
-          </li>
-          <li>
-            <a href="###">关于我们</a>
-          </li>
-        </ul>
-      </div>
-      <div class="address">地址：北京市昌平区宏福科技园综合楼6层</div>
-      <div class="beian">京ICP备19006430号</div>
-    </div>
+    <button @click="login">登录</button>
   </div>
 </template>
 
 <script>
+import { reqLogin } from '@api/user'
+
 export default {
   name: 'Login',
+  methods: {
+    login() {
+      // 在这之前需要定义接口api，然后才可以发送axios请求
+      // 调用这个函数，发送axios请求，请求数据
+      reqLogin('13700000000', '111111')
+        .then((res) => {
+          console.log('res', res)
+        })
+        .catch((err) => {
+          console.log('err', err)
+        })
+    },
+  },
 }
 </script>
 <style lang="less" scoped>
