@@ -67,11 +67,13 @@ export default {
   },
   methods: {
     search() {
+      //在search组件中，编程式导航点击的时候，第二次开始会出现一个问题，原因是编程式导航只传递一个参数的时候，返回的是一个promise对象，所以我们需要解决这个问题，所以我们可以重新定义push和replace，在new VueRouter
       // 结构赋值
       const { searchText } = this
       //判断“/”，searchText的内容是不是为空，为空的话则不加“/”，
       const params = searchText ? `/${searchText}` : ``
-      this.$router.push(`/search` + params)
+      const loaclhost = `/search` + params
+      this.$router.push(loaclhost)
     },
   },
 }
