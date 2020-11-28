@@ -1,5 +1,9 @@
 // 封装axios拦截器
 import axios from "axios";
+//引入nprogress进度条插件，在哪里使用就在哪里引入
+import NProgress from "nprogress"
+// 引入nprogress，直接从这个插件上面引入css样式
+import "nprogress/nprogress.css"
 
 const instance = axios.create({
   baseURL: "/api",//公共基础路劲
@@ -13,6 +17,8 @@ instance.interceptors.request.use(
   // 这里面是config函数，放置请求对象
   (config) => {
     // 将来请求的地址，请求参数，请求方式等，都会在config中找
+    //开始进度条
+    NProgress.start();
     return config
   }
 )
@@ -20,6 +26,8 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   // 响应成功的回调函数：响应状态码是2xx开头的
   (response) => {
+    //结束进度条
+    NProgress.done();
     if (response.data.code === 200) {
       // response.data.data里面的数据才是我们响应成功后所需要的数据
       return response.data.data;
@@ -30,6 +38,8 @@ instance.interceptors.response.use(
   },
   // 响应失败的回调函数：当响应状态码不是2xx开头的
   (err) => {
+    // 结束进度条
+    NProgress.done();
     const message = err.message || "网络错误";
     return Promise.reject(message)
   }
