@@ -48,7 +48,7 @@
         </router-link>
       </div>
       <div class="header-input">
-        <input type="text" class="header-text" />
+        <input type="text" class="header-text" v-model="searchText" />
         <button @click="search" class="header-button" type="button">
           搜索
         </button>
@@ -60,9 +60,18 @@
 <script>
 export default {
   name: 'Header',
+  data() {
+    return {
+      searchText: '',
+    }
+  },
   methods: {
     search() {
-      this.$router.push('/search')
+      // 结构赋值
+      const { searchText } = this
+      //判断“/”，searchText的内容是不是为空，为空的话则不加“/”，
+      const params = searchText ? `/${searchText}` : ``
+      this.$router.push(`/search` + params)
     },
   },
 }
@@ -121,6 +130,7 @@ export default {
 .header-bottom .header-img {
   width: 176px;
   height: 56px;
+  // line-height: 56px;
 }
 .header-bottom .header-input {
   display: flex;

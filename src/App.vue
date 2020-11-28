@@ -3,7 +3,8 @@
     <Header />
     <!-- 显示组件 -->
     <router-view></router-view>
-    <Footer />
+    <Footer v-if="!$route.meta.isFootershow"></Footer>
+    <!-- <Footer v-if="!$route.meta.isHideFooter"></Footer> -->
   </div>
 </template>
 

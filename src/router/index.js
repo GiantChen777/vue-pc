@@ -19,13 +19,19 @@ export default new VueRouter({
     {
       path: "/login",
       component: Login,
+      meta: {
+        isFootershow: true
+      }
     },
     {
       path: "/register",
       component: Register,
+      meta: {
+        isFootershow: true
+      }
     },
     {
-      path: "/search",
+      path: "/search/:searchText?",
       component: Search,
     }
   ]

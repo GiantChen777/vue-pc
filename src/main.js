@@ -9,5 +9,6 @@ Vue.config.productionTip = false
 
 new Vue({
   render: h => h(App),
+  // 这个router是 new VueRouter产生的实例，所以重写push和replace方法的时候，需要在原型上修改重写问题
   router
 }).$mount('#app')
