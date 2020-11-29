@@ -48,7 +48,7 @@
         <div class="beian">京ICP备19006430号</div>
       </div>
     </div>
-    <button @click="login">登录</button>
+    <el-button type="danger" @click="login">登录</el-button>
   </div>
 </template>
 
@@ -61,7 +61,7 @@ export default {
     login() {
       // 在这之前需要定义接口api，然后才可以发送axios请求
       // 调用这个函数，发送axios请求，请求数据
-      reqLogin('13700000000', '111111')
+      reqLogin('13700000000', '11111111')
         .then((res) => {
           console.log('res', res)
         })

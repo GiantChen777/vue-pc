@@ -2,8 +2,11 @@ import Vue from 'vue'
 import App from './App'
 
 import router from "./router"
+
 // 引入公共资源样式
 import "./style/reset.css"
+
+import './plugins/element.js'
 
 Vue.config.productionTip = false
 

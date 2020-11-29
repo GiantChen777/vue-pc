@@ -5,6 +5,9 @@ import NProgress from "nprogress"
 // 引入nprogress，直接从这个插件上面引入css样式
 import "nprogress/nprogress.css"
 
+// 单独引入element.ui组件
+import { Message } from 'element-ui';
+
 const instance = axios.create({
   baseURL: "/api",//公共基础路劲
   headers: {
@@ -34,13 +37,18 @@ instance.interceptors.response.use(
     }
     // 如果响应成功，但是功能有可能会失败，所以有可能也会返回一个失败的的promise对象
     // 功能失败 --> 返回失败的Promise
-    return Promise.reject(response.data.message);
+    const { message } = response.data
+    // 提示失败信息(element.ui组件的)
+    Message.error(message)
+    return Promise.reject(message);
   },
   // 响应失败的回调函数：当响应状态码不是2xx开头的
   (err) => {
     // 结束进度条
     NProgress.done();
     const message = err.message || "网络错误";
+    // 提示失败信息(element.ui组件的)
+    Message.error(  )
     return Promise.reject(message)
   }
 )
