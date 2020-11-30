@@ -14,15 +14,20 @@
         <a href="###">秒杀</a>
       </nav>
       <div class="sort">
-        <div class="all-sort-list2">
+        <div class="all-sort-list2" @click="gosearch">
           <div
             class="item bo"
             v-for="category in categoryList"
             :key="category.categoryId"
           >
             <h3>
-              <!-- 放置以及分类 -->
-              <a href="">{{ category.categoryName }}</a>
+              <!-- 放置一级分类 -->
+              <a
+                :data-categoryName="category.categoryName"
+                :data-categoryId="category.categoryId"
+                :data-categoryType="1"
+                >{{ category.categoryName }}</a
+              >
             </h3>
             <div class="item-list clearfix">
               <div class="subitem">
@@ -33,7 +38,12 @@
                 >
                   <dt>
                     <!-- 二级分类名称 -->
-                    <a href="">{{ child.categoryName }}</a>
+                    <a
+                      :data-categoryName="child.categoryName"
+                      :data-categoryId="child.categoryId"
+                      :data-categoryType="2"
+                      >{{ child.categoryName }}</a
+                    >
                   </dt>
                   <dd>
                     <em
@@ -41,7 +51,12 @@
                       :key="grandChild.categoryId"
                     >
                       <!-- 三级分类名称 -->
-                      <a href="">{{ grandChild.categoryName }}</a>
+                      <a
+                        :data-categoryName="grandChild.categoryName"
+                        :data-categoryId="grandChild.categoryId"
+                        :data-categoryType="3"
+                        >{{ grandChild.categoryName }}</a
+                      >
                     </em>
                   </dd>
                 </dl>
@@ -81,6 +96,21 @@ export default {
   }, */
   methods: {
     ...mapActions(['getCategoryList']),
+    // 通过事件委托事件，给外层父级绑定事件，通过data-xxx,自定义事件来给元素添加上数据，然后函数中，通过e.target.dataset可以获取到我们自定义事件的参数和数据，
+    gosearch(e) {
+      const { categoryname, categoryid, categorytype } = e.target.dataset
+
+      //判断是不是点的为空，为空内容的话就不跳转
+      if (!categoryname) return
+
+      this.$router.push({
+        name: 'Search',
+        query: {
+          categoryName: categoryname,
+          [`category${categorytype}Id`]: categoryid,
+        },
+      })
+    },
   },
   mounted() {
     // 在组件挂载成功的时候调用actions函数，获取数据
