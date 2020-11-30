@@ -94,8 +94,8 @@
 
 <script>
 export default {
-  name: "Floor",
-};
+  name: 'Floor',
+}
 </script>
 
 <style  lang="less" scoped>
@@ -133,7 +133,7 @@ export default {
               background-color: #fff;
 
               &::after {
-                content: "|";
+                content: '|';
                 padding: 0 10px;
               }
             }
@@ -141,7 +141,7 @@ export default {
             &:nth-child(7) {
               a {
                 &::after {
-                  content: "";
+                  content: '';
                 }
               }
             }

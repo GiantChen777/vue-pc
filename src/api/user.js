@@ -7,7 +7,7 @@ export const reqLogin = (phone, password) => {
   return request({
     // 里面是配置对象
     method: "POST",
-    url: "http://182.92.128.115/api/user/passport/login",
+    url: "/user/passport/login",
     data: {
       // 放置请求体参数，通常post请求
       phone,
