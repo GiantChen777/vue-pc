@@ -88,9 +88,7 @@ export default {
       //判断query有没有
       const { categoryName } = this.$route.query
       if (categoryName) {
-        location.qury = {
-          categoryName,
-        }
+        location.query = this.$route.query
       }
 
       this.$router.push(location)
