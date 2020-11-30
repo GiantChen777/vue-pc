@@ -55,21 +55,35 @@
 </template>
 
 <script>
-import { reqGetBaseCategoryList } from '@api/home'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'TypeNav',
-  // 初始化数据,是一个数组，方便后面便利渲染数据,初始化响应式数据
+  /*   // 初始化数据,是一个数组，方便后面便利渲染数据,初始化响应式数据
   data() {
     return {
       // 初始化响应式数据
       categoryList: [],
     }
+  }, */
+  computed: {
+    ...mapState({
+      categoryList: (state) => {
+        return state.home.categoryList.slice(0, 15)
+      },
+    }),
   },
-  // 在组件挂载的时候就响应数据，
+  /*   // 在组件挂载的时候就响应数据，
   async mounted() {
     const result = await reqGetBaseCategoryList()
     this.categoryList = result.slice(0, 14)
+  }, */
+  methods: {
+    ...mapActions(['getCategoryList']),
+  },
+  mounted() {
+    // 在组件挂载成功的时候调用actions函数，获取数据
+    this.getCategoryList()
   },
 }
 </script>
