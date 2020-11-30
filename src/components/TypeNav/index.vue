@@ -126,6 +126,9 @@ export default {
     },
   },
   mounted() {
+    // 减少请求的数据，请求同一数据的时候，就没次请求的数据的时候，判断请求的是不是同一数据，是的话就直接return
+    //我们就判断categoryList（这个是我们的数据），看这里面有没有数据，有的话，就直接return
+    if (this.categoryList.length) return
     // 在组件挂载成功的时候调用actions函数，获取数据
     this.getCategoryList()
   },
