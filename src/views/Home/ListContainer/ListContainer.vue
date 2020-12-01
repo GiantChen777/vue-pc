@@ -2,34 +2,9 @@
   <div class="list-container">
     <div class="sortList clearfix">
       <div class="center">
+        <!-- 引入swiper html的内容 -->
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
-          <div class="swiper-wrapper">
-            <div
-              class="swiper-slide"
-              v-for="banner in banners"
-              :key="banner.id"
-            >
-              <!-- <img src="./images/banner1.jpg" /> -->
-              <img :src="banner.imgUrl" />
-            </div>
-            <!-- <div class="swiper-slide">
-              <img src="./images/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner4.jpg" />
-            </div> -->
-          </div>
-          <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
-
-          <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
+        <Carousel :carouselList="banners" />
       </div>
       <div class="right">
         <div class="news">
@@ -106,6 +81,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import Carousel from '@comps/Carousel'
+
+//引入之后，必须使用swiper
 
 export default {
   name: 'ListContainer',
@@ -117,8 +95,61 @@ export default {
   methods: {
     ...mapActions(['getGetBanners']),
   },
-  mounted() {
-    this.getGetBanners()
+  async mounted() {
+    // 1.getGetBanners是去请求我们的轮播图数据，是一个异步的请求，所以需要先请求到数据，然后我们再去new swiper，
+    await this.getGetBanners()
+
+    //2.数据请求到了，但是new Swiper的前提：必须先生成相应的DOM结构，所以必须又要有DOM结构，更新用户界面都是异步的，所以要等同步全部执行完，在去更新，所以new swiper就必须是一个异步的，DOM元素渲染是同步的，所以第一种方案给之设定一个计时器
+    // 方案二：
+    // this.$nextTick(() => {})
+    // Vue.nextTick(() => {})
+    //   等当前用户界面更新完毕，在触发其中的回调函数
+    //   将其中的回调函数放到更新完成DOM后在触发
+    //   其中的回调函数可以近似看做实在updated中执行（但是只会执行一次）
+    /*  this.$nextTick(() => {
+      new Swiper('.swiper-container', {
+        loop: true, // 循环模式选项
+        autoplay: {
+          delay: 2000,
+          disableOnInteraction: false,
+        },
+
+        // 如果需要分页器
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+ 
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+      })
+    
+    })
+      */
+
+    /* // 然后在组件挂载成功的时候引入swiper的初始化内容
+    setTimeout(() => {
+      new Swiper('.swiper-container', {
+        loop: true, // 循环模式选项
+
+        // 如果需要分页器
+        pagination: {
+          el: '.swiper-pagination',
+        },
+
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+      })
+    }, 1) */
+  },
+  components: {
+    Carousel,
   },
 }
 </script>

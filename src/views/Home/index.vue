@@ -10,7 +10,7 @@
     <!-- 猜你喜欢 -->
     <Like />
     <!--楼层-->
-    <Floor />
+    <Floor :floors="floors" />
     <!--楼层-->
     <Floor />
     <!--商标-->
