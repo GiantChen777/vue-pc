@@ -5,7 +5,7 @@
     "keywords|6": [
       "@ctitle(3,6)"
     ],
-    "imgUrl": "@image('210x250','@color')",
+    "imgUrl": "@image('210x250','@color','laochen')",
     "navList|6-10": [
       {
         "url": "#",
@@ -15,12 +15,12 @@
     "carouselList|3": [
       {
         "id|+1": 1,
-        "imgUrl": "@image('329x360', '@color')"
+        "imgUrl": "@image('329x360', '@color','tianzong')"
       }
     ],
     "recommendList|4": [
-      "@image('200x200', '@color')"
+      "@image('200x200', '@color','i love tian')"
     ],
-    "bigImg": "@image('220x360', '@color')"
+    "bigImg": "@image('220x360', '@color','shatian')"
   }
 ]

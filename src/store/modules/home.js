@@ -1,11 +1,14 @@
 // 在这里请求数据，发送axios
-import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors } from '@api/home'
+import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors, reqGetChen, reqGetTian, reqGetFu } from '@api/home'
 
 export default {
   state: {
     categoryList: [], //这个是home组件三级列表的初始化响应式数据
     banners: [],//首页轮播图数据,
-    floors: []  //首页楼层数据
+    floors: [],  //首页楼层数据
+    chen: [],//首页今日排行数据
+    tian: [],//首页热卖排行数据
+    fu: [],//首页猜你喜欢数据
   },
   getters: {},
   actions: {
@@ -23,11 +26,25 @@ export default {
       commit("GET_GETBANNERS", banners)
     },
     // 请求首页楼层电器数据
-    async reqGetFloors ({ commit }) {
+    async getFloors ({ commit }) {
       const floors = await reqGetFloors()
       commit("REQ_GETFLOORS", floors)
-    }
-
+    },
+    // 请求今日推荐的数据
+    async getChen ({ commit }) {
+      const chen = await reqGetChen()
+      commit('GET_CHEN', chen)
+    },
+    // 热卖排行
+    async getTian ({ commit }) {
+      const tian = await reqGetTian()
+      commit("GET_TIAN", tian)
+    },
+    // c猜你喜欢数据
+    async getFu ({ commit }) {
+      const fu = await reqGetFu()
+      commit("GET_FU", fu)
+    },
   },
   mutations: {
     GET_CATEGORY_LIST (state, categoryList) {
@@ -38,6 +55,15 @@ export default {
     },
     REQ_GETFLOORS (state, floors) {
       state.floors = floors
+    },
+    GET_CHEN (state, chen) {
+      state.chen = chen
+    },
+    GET_TIAN (state, tian) {
+      state.tian = tian
+    },
+    GET_FU (state, fu) {
+      state.fu = fu
     }
   }
 }

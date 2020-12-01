@@ -34,10 +34,10 @@ export default {
     }),
   },
   methods: {
-    ...mapActions(['reqGetFloors']),
+    ...mapActions(['getFloors']),
   },
   mounted() {
-    this.reqGetFloors()
+    this.getFloors()
   },
   components: {
     Brand,

@@ -30,4 +30,25 @@ export const reqGetFloors = () => {
     method: "GET",
     url: "/floors",
   });
-}; 
+};
+// 定义今日推荐的图片数据的api
+export const reqGetChen = () => {
+  return mockRequest({
+    method: "GET",
+    url: "/chen",
+  })
+};
+//定义热卖排行接口，以便请求数据
+export const reqGetTian = () => {
+  return mockRequest({
+    method: "GET",
+    url: "/tian",
+  })
+};
+// 定义猜你喜欢的数据接口
+export const reqGetFu = () => {
+  return mockRequest({
+    method: "GET",
+    url: "/fu",
+  })
+};

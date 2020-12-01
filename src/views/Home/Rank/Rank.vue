@@ -21,59 +21,19 @@
           <p class="text">新品排行</p>
         </a>
       </div>
-
     </div>
     <div class="content">
       <ul>
         <li>
-          <div class="img-item">
+          <div class="img-item" v-for="ti in tian" :key="ti.id">
             <p class="tab-pic">
               <a href="#">
-                <img src="./images/1.jpg" />
+                <img :src="ti.imgUrl" />
               </a>
             </p>
             <div class="tab-info">
               <div class="info-title">
-                <a href="#">【官网价直降1100】Apple iPhone 8 Plus 256GB 银色 移动联通电信4G手机</a>
-              </div>
-              <p class="info-price">定金：¥100.00</p>
-            </div>
-          </div>
-          <div class="img-item">
-            <p class="tab-pic">
-              <a href="#">
-                <img src="./images/1.jpg" />
-              </a>
-            </p>
-            <div class="tab-info">
-              <div class="info-title">
-                <a href="#">【官网价直降1100】Apple iPhone 8 Plus 256GB 银色 移动联通电信4G手机</a>
-              </div>
-              <p class="info-price">定金：¥100.00</p>
-            </div>
-          </div>
-          <div class="img-item">
-            <p class="tab-pic">
-              <a href="#">
-                <img src="./images/1.jpg" />
-              </a>
-            </p>
-            <div class="tab-info">
-              <div class="info-title">
-                <a href="#">【官网价直降1100】Apple iPhone 8 Plus 256GB 银色 移动联通电信4G手机</a>
-              </div>
-              <p class="info-price">定金：¥100.00</p>
-            </div>
-          </div>
-          <div class="img-item">
-            <p class="tab-pic">
-              <a href="#">
-                <img src="./images/1.jpg" />
-              </a>
-            </p>
-            <div class="tab-info">
-              <div class="info-title">
-                <a href="#">【官网价直降1100】Apple iPhone 8 Plus 256GB 银色 移动联通电信4G手机</a>
+                <a href="#">{{ ti.title }}</a>
               </div>
               <p class="info-price">定金：¥100.00</p>
             </div>
@@ -85,8 +45,21 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'Rank',
+  computed: {
+    ...mapState({
+      tian: (state) => state.home.tian,
+    }),
+  },
+  methods: {
+    ...mapActions(['getTian']),
+  },
+  mounted() {
+    this.getTian()
+  },
 }
 </script>
 

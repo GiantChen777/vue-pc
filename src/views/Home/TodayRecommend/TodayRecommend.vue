@@ -2,16 +2,16 @@
   <div class="today-recommend">
     <div class="py-container">
       <ul class="recommend">
-        <li class="clock">
+        <!--  <li class="clock">
           <div class="time">
             <img src="./images/clock.png" />
             <h3>今日推荐</h3>
           </div>
+        </li> -->
+        <li class="banner" v-for="c in chen" :key="c.id">
+          <img :src="c.imgURL" />
         </li>
-        <li class="banner">
-          <img src="./images/today01.png" />
-        </li>
-        <li class="banner">
+        <!--  <li class="banner">
           <img src="./images/today02.png" />
         </li>
         <li class="banner">
@@ -19,15 +19,28 @@
         </li>
         <li class="banner">
           <img src="./images/today04.png" />
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'TodayRecommend',
+  computed: {
+    ...mapState({
+      chen: (state) => state.home.chen,
+    }),
+  },
+  methods: {
+    ...mapActions(['getChen']),
+  },
+  mounted() {
+    this.getChen()
+  },
 }
 </script>
 
