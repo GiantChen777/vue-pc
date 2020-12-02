@@ -11,38 +11,73 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
+            <!-- 然后在根据里面有没有内容，我们判断哪个li显不显示使用v-show -->
+            <!-- 然后下一步我们当点击删除按钮的时候，search搜索框的内容也要被清空掉，因为一个是header组件，另一个是search组件，是兄弟关系，所以使用全局事件总线需要 -->
+            <li class="with-x" @click="delkeyword" v-show="options.keyword">
+              关键词： {{ options.keyword }}<i>×</i>
+            </li>
+            <li
+              class="with-x"
+              @click="delcategoryName"
+              v-show="options.categoryName"
+            >
+              分类名称： {{ options.categoryName }}<i>×</i>
+            </li>
+            <!-- 品牌的那个li标签 -->
+            <li class="with-x" @click="deltrademark" v-show="options.trademark">
+              品牌： {{ options.trademark.split(':')[1] }}<i>×</i>
+            </li>
+
+            <!-- 品牌属性数据的那个li -->
+            <!-- 因为有多个，所以需要遍历生成这个li,,,key的值使用这个prop，因为里面既包含id，还因为prop是一个特殊的值，不会重复，所以可以使用 -->
+            <li
+              class="with-x"
+              v-for="(prop, index) in options.props"
+              :key="prop"
+              @click="delprop(index)"
+            >
+              {{ prop.split(':')[2] }}： {{ prop.split(':')[1] }}<i>×</i>
+            </li>
+
+            <!--  <li class="with-x">iphone<i>×</i></li>
             <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x">OPPO<i>×</i></li> -->
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
-
+        <SearchSelector :addTrademark="addTrademark" :addProps="addProps" />
+        <!-- <TypeNav /> -->
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <!-- 这里class类名active'就要写成动态的类名，不然不好转换 -->
+                <!-- 左边是key active类名，右边是value，为true就是有这个类名，为false就是没有这个类名， -->
+                <li :class="{ active: true }" @click="setOrder('1')">
+                  <a
+                    >综合
+                    <i class="iconfont icon-falling"></i>
+                  </a>
                 </li>
                 <li>
-                  <a href="#">销量</a>
+                  <a>销量</a>
                 </li>
                 <li>
-                  <a href="#">新品</a>
+                  <a>新品</a>
                 </li>
                 <li>
-                  <a href="#">评价</a>
+                  <a>评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: false }" @click="setOrder('2')">
+                  <a
+                    >价格
+                    <div>
+                      <i class="iconfont icon-arrow-up"></i>
+                      <i class="iconfont icon-arrow-down"></i>
+                    </div>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -125,20 +160,150 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import SearchSelector from './SearchSelector/SearchSelector'
+import TypeNav from '@comps/TypeNav'
 
 export default {
   name: 'Search',
+  data() {
+    return {
+      // 初始化data对象（在search组件请求数据的时候可能会携带参数）
+      options: {
+        category1Id: '', //一级分类id
+        category2Id: '', //二级分类id
+        category3Id: '', //三级分类id
+        categoryName: '', //分类名称
+        keyword: '', //搜索关键字（params参数）
+        order: '1:desc', //排序方式
+        pageNo: 1, //分页页码（当前在第几页）
+        pageSize: 10, //分页 的每页商品数量
+        props: [], //商品属性
+        trademark: '', //商品品牌
+      },
+    }
+  },
   components: {
     SearchSelector,
+    TypeNav,
   },
   computed: {
     ...mapGetters(['goodsList']),
   },
   methods: {
     ...mapActions(['getProductList']),
+    UpdateProductList() {
+      const { searchText: keyword } = this.$route.params
+      // 结构赋值得到query参数
+      const {
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+      } = this.$route.query
+      // 当数据变化的时候，我们就直接更新options的初始化的值
+      const options = {
+        ...this.options, //携带上所有初始化数据
+        keyword, //以下更新的数据后会覆盖之前得到的数据
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+      }
+      // 想要keyword得到数据，就需要给我们初始化定义的数据重新赋值
+      this.options = options
+
+      this.getProductList(options)
+      // console.log(options)
+    },
+    // s删除keyword的内容
+    delkeyword() {
+      this.options.keyword = ''
+      this.$bus.$emit('clearsearch')
+      //删除关键字之后，清楚路径params参数(这一步操作完之后，我们使之不管在那个页面，当点击回退按钮，都跳回到首页)
+      this.$router.replace({
+        name: 'search',
+        params: '',
+        query: this.$route.query,
+      })
+    },
+    // 删除categoryName的内容，然后根据里面的内容判断显不显示
+    delcategoryName() {
+      this.options.categoryName = ''
+      this.options.category1Id = ''
+      this.options.category2Id = ''
+      this.options.category3Id = ''
+      // 点击删除categoryName的内容之后，清除query参数
+      this.$router.replace({
+        name: 'search',
+        params: this.$route.params,
+        query: '',
+      })
+    },
+    // 添加品牌数据和删除品牌数据
+    addTrademark(trademark) {
+      this.options.trademark = trademark
+      // 当品牌数据更新了，我们监视请求数据，更新数据，就需要调用这个函数
+      this.UpdateProductList()
+    },
+    // 删除品牌数据，
+    deltrademark() {
+      this.options.trademark = ''
+      // 删除之后更新数据
+      this.UpdateProductList()
+    },
+    // 添加品牌属性数据，是一个对象，需要进行传参（每次在父组件定义添加的函数方法，是因为li需要在父组件里面定义展示生成的li，需要子组件给进行传参，然后才能生成所对应点击的数据，）
+    addProps(prop) {
+      this.options.props.push(prop)
+      // 向初始数据里面添加数据之后需要重新发送请求，更新数据
+      this.UpdateProductList()
+    },
+    // 点击删除品牌属性数据,可以跟传送过来的数据下标，然后点击删除所想要删除的品牌属性数据
+    delprop(index) {
+      this.options.props.splice(index, 1)
+      this.UpdateProductList()
+    },
+    // 给order定义点击事件，设置排序方式 1:desc
+    // 这下面这行的order是上面定义传下来的字符串""1""2"
+    setOrder(order) {
+      // 这下面这行代码是原生的
+      const [orderNum, orderType] = this.options.order.split(':')
+      this.options.order = `${orderNum}:${orderType}`
+    },
   },
   mounted() {
-    this.getProductList()
+    /**
+     * 第一步，根据url地址栏，来更新点击全部分类的可以搜索的内容
+     * 第二步，在search组件中，同时也更新搜索之后根据地址栏发生变化，也更新数据，使用watch属性，监听地址栏的变化从而更新数据
+     */
+    // 在这里发送请求数据的时候，可能会携带data数据，因为这个data是一个空对象，有没有数据都是可以的
+    // 结构赋值提取params参数中的searchText属性（因为我们设置的params参数就是searchText）
+    // 并且重命名为keyword（因为在我们初始化数据的时候命名的就是keyword）
+    /* const { searchText: keyword } = this.$route.params
+    // 结构赋值得到query参数
+    const {
+      categoryName,
+      category1Id,
+      category2Id,
+      category3Id,
+    } = this.$route.query
+    // 当数据变化的时候，我们就直接更新options的初始化的值
+    const options = {
+      ...this.options, //携带上所有初始化数据
+      keyword, //以下更新的数据后会覆盖之前得到的数据
+      categoryName,
+      category1Id,
+      category2Id,
+      category3Id,
+    } 
+    this.getProductList(options)
+  },
+  */
+    this.UpdateProductList()
+  },
+  watch: {
+    // 监听$route属性的变化，这样不管是params还是query参数发生变化，都可以监听的到
+    $route() {
+      this.UpdateProductList()
+    },
   },
 }
 </script>
@@ -245,11 +410,25 @@ export default {
               line-height: 18px;
 
               a {
-                display: block;
+                display: flex;
+                align-items: center;
                 cursor: pointer;
                 padding: 11px 15px;
                 color: #777;
                 text-decoration: none;
+                i {
+                  margin-left: 5px;
+                }
+                div {
+                  display: flex;
+                  flex-direction: column;
+                  height: 8px;
+                  line-height: 3px;
+                  i {
+                    // margin-top: 1px;
+                    padding: 0 0 5px 5px;
+                  }
+                }
               }
 
               &.active {

@@ -23,6 +23,7 @@ export default {
   },
   actions: {
     async getProductList ({ commit }, data = {}) {
+      // console.log(data)
       const ProductList = await reqGetProductList(data)
       commit("GET_PRODUCT_LIST", ProductList)
     }

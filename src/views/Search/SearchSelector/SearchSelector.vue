@@ -1,10 +1,16 @@
 <template>
   <div class="clearfix selector">
+    <!-- 品牌数据 -->
     <div class="type-wrap logo">
       <div class="fl key brand">品牌</div>
       <div class="value logos">
         <ul class="logo-list">
-          <li v-for="trademark in trademarkList" :key="trademark.tmId">
+          <!-- 给绑定点击事件 -->
+          <li
+            v-for="trademark in trademarkList"
+            :key="trademark.tmId"
+            @click="addTrademark(`${trademark.tmId}:${trademark.tmName}`)"
+          >
             {{ trademark.tmName }}
           </li>
         </ul>
@@ -14,11 +20,18 @@
         <a href="javascript:void(0);">更多</a>
       </div>
     </div>
-    <div class="type-wrap" v-for="attrs in attrsList" :key="attrs.arrtId">
+    <!-- 品牌属性 -->
+    <div class="type-wrap" v-for="attrs in attrsList" :key="attrs.attrId">
       <div class="fl key">{{ attrs.attrName }}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(attr, index) in attrs.attrValueList" :key="index">
+          <!-- 品牌属性数据 -->
+          <!--调用这个方法，然后将li添加到 -->
+          <li
+            v-for="(attr, index) in attrs.attrValueList"
+            :key="index"
+            @click="addProps(`${attrs.attrId}:${attr}:${attrs.attrName}`)"
+          >
             <a>{{ attr }}</a>
           </li>
         </ul>
@@ -33,6 +46,10 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'SearchSelector',
+  props: {
+    addTrademark: Function,
+    addProps: Function,
+  },
   computed: {
     ...mapGetters(['trademarkList', 'attrsList']),
   },

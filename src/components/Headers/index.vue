@@ -90,9 +90,18 @@ export default {
       if (categoryName) {
         location.query = this.$route.query
       }
-
-      this.$router.push(location)
+      // 我们的需求是需要在当不管在哪里点击的时候，点击回退的时候，都能回到首页，就判断是不是当前在search页面点击的搜索
+      if (this.$route.name === 'search') {
+        this.$router.replace(location)
+      } else {
+        this.$router.push(location)
+      }
     },
+  },
+  mounted() {
+    this.$bus.$on('clearsearch', () => {
+      this.searchText = ''
+    })
   },
 }
 </script>

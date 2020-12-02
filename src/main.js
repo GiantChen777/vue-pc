@@ -9,12 +9,17 @@ import './mock/mockServe';
 
 // 引入公共资源样式
 import "./style/reset.css"
+import "./style/iconfont.css"
 
 import './plugins/element.js'
 
 Vue.config.productionTip = false
 
 new Vue({
+  beforeCreate () {
+    // 初始化全局事件总线对象,给vm创建一个方法
+    Vue.prototype.$bus = this
+  },
   render: h => h(App),
   // 这个router是 new VueRouter产生的实例，所以重写push和replace方法的时候，需要在原型上修改重写问题
   router,
