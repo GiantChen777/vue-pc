@@ -65,8 +65,8 @@
                     <i
                       :class="{
                         iconfont: true,
-                        'icon-falling': isDone,
-                        'icon-rising': !isDone,
+                        'icon-falling': isDone, //降序
+                        'icon-rising': !isDone, //升序
                       }"
                     ></i>
                   </a>
@@ -91,14 +91,14 @@
                         :class="{
                           iconfont: true,
                           'icon-arrow-up': true,
-                          deactive: options.order.indexOf('2') > -1 && isShow,
+                          deactive: options.order.indexOf('2') > -1 && isShow, //升序
                         }"
                       ></i>
                       <i
                         :class="{
                           iconfont: true,
                           'icon-arrow-down': true,
-                          deactive: options.order.indexOf('2') > -1 && !isShow,
+                          deactive: options.order.indexOf('2') > -1 && !isShow, //降序
                         }"
                       ></i>
                     </div>
@@ -293,7 +293,7 @@ export default {
         orderType = orderType === 'desc' ? 'asc' : 'desc'
       } else {
         if (orderNum === '1') {
-          orderType = this.isDown ? 'desc' : 'asc'
+          orderType = this.isDone ? 'desc' : 'asc'
         } else {
           this.isShow = false
           orderType = 'asc'
