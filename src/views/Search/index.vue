@@ -55,10 +55,20 @@
               <ul class="sui-nav">
                 <!-- 这里class类名active'就要写成动态的类名，不然不好转换 -->
                 <!-- 左边是key active类名，右边是value，为true就是有这个类名，为false就是没有这个类名， -->
-                <li :class="{ active: true }" @click="setOrder('1')">
+                <li
+                  :class="{ active: options.order.indexOf('1') > -1 }"
+                  @click="setOrder('1')"
+                >
+                  <!-- 可以通过跟上面一样的来判断字体图标的为true或者是false，来让图标字体进行切换 -->
                   <a
                     >综合
-                    <i class="iconfont icon-falling"></i>
+                    <i
+                      :class="{
+                        iconfont: true,
+                        'icon-falling': isDone,
+                        'icon-rising': !isDone,
+                      }"
+                    ></i>
                   </a>
                 </li>
                 <li>
@@ -70,18 +80,34 @@
                 <li>
                   <a>评价</a>
                 </li>
-                <li :class="{ active: false }" @click="setOrder('2')">
+                <li
+                  :class="{ active: options.order.indexOf('2') > -1 }"
+                  @click="setOrder('2')"
+                >
                   <a
                     >价格
                     <div>
-                      <i class="iconfont icon-arrow-up"></i>
-                      <i class="iconfont icon-arrow-down"></i>
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-arrow-up': true,
+                          deactive: options.order.indexOf('2') > -1 && isShow,
+                        }"
+                      ></i>
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-arrow-down': true,
+                          deactive: options.order.indexOf('2') > -1 && !isShow,
+                        }"
+                      ></i>
                     </div>
                   </a>
                 </li>
               </ul>
             </div>
           </div>
+          <!-- 商品列表 -->
           <div class="goods-list">
             <ul class="yui3-g">
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
@@ -122,35 +148,20 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <!-- 分页器 -->
+          <!-- size-change点击每页的那个页面显示多少条 -->
+          <!-- current-change点击页码的那个页面显示那个页面 -->
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="options.pageNo"
+            :page-sizes="[5, 10, 20, 30]"
+            :page-size="5"
+            background
+            layout=" prev, pager, next, sizes,total, jumper"
+            :total="total"
+          >
+          </el-pagination>
         </div>
       </div>
     </div>
@@ -172,13 +183,15 @@ export default {
         category2Id: '', //二级分类id
         category3Id: '', //三级分类id
         categoryName: '', //分类名称
-        keyword: '', //搜索关键字（params参数）
+        keyword: '', //搜索关键字（params参数
         order: '1:desc', //排序方式
         pageNo: 1, //分页页码（当前在第几页）
         pageSize: 10, //分页 的每页商品数量
         props: [], //商品属性
         trademark: '', //商品品牌
       },
+      isDone: true, //综合排序的图标，
+      isShow: false, //价格
     }
   },
   components: {
@@ -186,11 +199,11 @@ export default {
     TypeNav,
   },
   computed: {
-    ...mapGetters(['goodsList']),
+    ...mapGetters(['goodsList', 'total']),
   },
   methods: {
     ...mapActions(['getProductList']),
-    UpdateProductList() {
+    UpdateProductList(pageNo = 1) {
       const { searchText: keyword } = this.$route.params
       // 结构赋值得到query参数
       const {
@@ -207,6 +220,7 @@ export default {
         category1Id,
         category2Id,
         category3Id,
+        pageNo,
       }
       // 想要keyword得到数据，就需要给我们初始化定义的数据重新赋值
       this.options = options
@@ -261,12 +275,43 @@ export default {
       this.options.props.splice(index, 1)
       this.UpdateProductList()
     },
+    // @click="setOrder('2')"
     // 给order定义点击事件，设置排序方式 1:desc
     // 这下面这行的order是上面定义传下来的字符串""1""2"
-    setOrder(order) {
-      // 这下面这行代码是原生的
-      const [orderNum, orderType] = this.options.order.split(':')
+    setOrder(orderNum) {
+      // 这下面这行代码是原生的'1:desc'
+      let [ordernum, orderType] = this.options.order.split(':')
+      // 判断ordernum ===orderNum是否相等，
+      // 相等就是第二次，就改变图标，不想等就是第一次，不改变图标
+      if (ordernum === orderNum) {
+        // 然后判断ordernum的值是""1"还是""2"，是1的话就改综合排序，是2的话就改价格排序
+        if (orderNum === '1') {
+          this.isDone = !this.isDone
+        } else {
+          this.isShow = !this.isShow
+        }
+        orderType = orderType === 'desc' ? 'asc' : 'desc'
+      } else {
+        if (orderNum === '1') {
+          orderType = this.isDown ? 'desc' : 'asc'
+        } else {
+          this.isShow = false
+          orderType = 'asc'
+        }
+      }
+      // 这下面的这个orderNum是上面所传过来的字符串“1”，“2”
       this.options.order = `${orderNum}:${orderType}`
+      this.UpdateProductList()
+    },
+    // 当每页条数发生变化触发
+    handleSizeChange(pageSize) {
+      this.options.pageSize = pageSize
+      this.UpdateProductList()
+    },
+    //当页面发生变化触发
+    handleCurrentChange(pageNo) {
+      // this.options.pageNo = pageNo
+      this.UpdateProductList(pageNo)
     },
   },
   mounted() {
@@ -427,6 +472,9 @@ export default {
                   i {
                     // margin-top: 1px;
                     padding: 0 0 5px 5px;
+                    &.deactive {
+                      color: rgba(0, 0, 0, 0.7);
+                    }
                   }
                 }
               }
