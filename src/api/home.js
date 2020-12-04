@@ -52,3 +52,24 @@ export const reqGetFu = () => {
     url: "/fu",
   })
 };
+// 定义图标的接口
+export const reqGetbrand = () => {
+  return mockRequest({
+    method: "GET",
+    url: "/brand",
+  })
+}
+// 定义尚品汇快报的li
+export const reqgetBanner = () => {
+  return mockRequest({
+    method: "GET",
+    url: "/banner"
+  })
+}
+// 定义图标字体的数据
+export const reqgetZong = () => {
+  return mockRequest({
+    method: "GET",
+    url: "/zong"
+  })
+}

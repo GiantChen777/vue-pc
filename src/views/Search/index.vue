@@ -113,9 +113,9 @@
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
+                    <router-link :to="`/detail/${goods.id}`"
                       ><img :src="goods.defaultImg"
-                    /></a>
+                    /></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -124,11 +124,9 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a target="_blank" href="item.html" :title="goods.title"
-                      >Apple苹果iPhone 6s (A1699)Apple苹果iPhone 6s
-                      (A1699)Apple苹果iPhone 6s (A1699)Apple苹果iPhone 6s
-                      (A1699)</a
-                    >
+                    <router-link :to="`/detail/${goods.id}`">{{
+                      goods.title
+                    }}</router-link>
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -151,7 +149,7 @@
           <!-- 分页器 -->
           <!-- size-change点击每页的那个页面显示多少条 -->
           <!-- current-change点击页码的那个页面显示那个页面 -->
-          <el-pagination
+          <!--  <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="options.pageNo"
@@ -161,7 +159,21 @@
             layout=" prev, pager, next, sizes,total, jumper"
             :total="total"
           >
-          </el-pagination>
+          </el-pagination> -->
+          <!--
+          current-page:表示当前的页码，默认值是应该是1，是一个可读被点击的 
+          pager-count：分页器显示多少个按钮
+          page-size：每页显示多少条数据
+          total：总的数量
+           -->
+          <!--  @current-change="handleCurrentChange" 是一个自定义事件，可以通过监听currentPage的值从而触发函数更新数据 -->
+          <Pagination
+            @current-change="handleCurrentChange"
+            :current-page="options.pageNo"
+            :pager-count="7"
+            :page-size="5"
+            :total="total"
+          />
         </div>
       </div>
     </div>
@@ -172,6 +184,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import SearchSelector from './SearchSelector/SearchSelector'
 import TypeNav from '@comps/TypeNav'
+import Pagination from '@comps/Pagination'
 
 export default {
   name: 'Search',
@@ -197,6 +210,7 @@ export default {
   components: {
     SearchSelector,
     TypeNav,
+    Pagination,
   },
   computed: {
     ...mapGetters(['goodsList', 'total']),
@@ -254,6 +268,7 @@ export default {
     },
     // 添加品牌数据和删除品牌数据
     addTrademark(trademark) {
+      if (this.options.trademark) return
       this.options.trademark = trademark
       // 当品牌数据更新了，我们监视请求数据，更新数据，就需要调用这个函数
       this.UpdateProductList()
@@ -266,6 +281,7 @@ export default {
     },
     // 添加品牌属性数据，是一个对象，需要进行传参（每次在父组件定义添加的函数方法，是因为li需要在父组件里面定义展示生成的li，需要子组件给进行传参，然后才能生成所对应点击的数据，）
     addProps(prop) {
+      if (this.options.props.indexOf(prop) > -1) return
       this.options.props.push(prop)
       // 向初始数据里面添加数据之后需要重新发送请求，更新数据
       this.UpdateProductList()

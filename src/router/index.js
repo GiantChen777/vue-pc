@@ -5,6 +5,7 @@ import Home from "../views/Home"
 import Register from "../views/Register"
 import Login from "../views/Login"
 import Search from "../views/Search"
+import Detail from "../views/Detail"
 
 //安装插件
 Vue.use(VueRouter)
@@ -53,6 +54,17 @@ export default new VueRouter({
       name: "search",
       path: "/search/:searchText?",
       component: Search,
+    },
+    {
+      name: "detail",
+      path: "/detail/:id",
+      component: Detail,
+
     }
-  ]
+  ],
+  // 但由于点击的时候跳转的时候应该在页面的最顶部，而不是我们点击时候的位置，使用scrollBehavior来设置
+  // 使用前端路由，当切换到新路由时，想要页面滚到顶部，或者是保持原先的滚动位置，就像重新加载页面那样
+  scrollBehavior () {
+    return { x: 0, y: 0 }
+  }
 })

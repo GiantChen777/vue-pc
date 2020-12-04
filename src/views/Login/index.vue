@@ -4,7 +4,7 @@
       <div class="login-center">
         <div class="login-warp">
           <div class="login-from">
-            <ul class="tab clearFix">
+            <ul class="tab-clearFix">
               <li>
                 <a href="##" style="border-right: 0">扫描登录</a>
               </li>
@@ -49,6 +49,7 @@
       </div>
     </div>
     <el-button type="danger" @click="login">登录</el-button>
+    
   </div>
 </template>
 
@@ -87,17 +88,39 @@ export default {
   height: 100%;
   background: url('./images/loginbg.png') no-repeat;
   margin: 0 auto;
-  border: 1px solid black;
+  // border: 1px solid black;
 }
 .login-center .login-warp .login-from {
   width: 420px;
   height: 406px;
-  padding: 20px;
-  margin-top: 20px;
-  border: 1px solid yellow;
+  padding: 20px 20px 0 20px;
+  margin-top: 30px;
+  // border: 1px solid yellow;
   float: right;
 }
-
+.login-from .tab-clearFix {
+  width: 400px;
+  height: 366px;
+  // border: 1px solid pink;
+  margin: 10px;
+  display: flex;
+  text-align: center;
+  background-color: #fff;
+}
+.login-from .tab-clearFix li {
+  width: 200px;
+  height: 50px;
+  line-height: 50px;
+  border: 1px solid #e4e4e4;
+}
+.login-from .tab-clearFix li a {
+  font-size: 20px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.login-from .tab-clearFix li:nth-child(2) a {
+  color: red;
+}
 .footer-bottem {
   width: 1200px;
   margin: 0 auto;

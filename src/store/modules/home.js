@@ -1,5 +1,5 @@
 // 在这里请求数据，发送axios
-import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors, reqGetChen, reqGetTian, reqGetFu } from '@api/home'
+import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors, reqGetChen, reqGetTian, reqGetFu, reqGetbrand, reqgetBanner, reqgetZong } from '@api/home'
 
 export default {
   state: {
@@ -9,6 +9,9 @@ export default {
     chen: [],//首页今日排行数据
     tian: [],//首页热卖排行数据
     fu: [],//首页猜你喜欢数据
+    brand: [],//首页图标数据
+    banner: [],//首页尚品汇快报的数据
+    zong: [],//首页尚品汇快报图标的数据
   },
   getters: {},
   actions: {
@@ -45,6 +48,21 @@ export default {
       const fu = await reqGetFu()
       commit("GET_FU", fu)
     },
+    //首页图标的数据
+    async getbrand ({ commit }) {
+      const brand = await reqGetbrand()
+      commit("GET_BRAND", brand)
+    },
+    // 首页尚品汇快报的数据
+    async getBanner ({ commit }) {
+      const banner = await reqgetBanner()
+      commit("GET_BANNER", banner)
+    },
+    // 定义尚品汇图标的数据
+    async getZong ({ commit }) {
+      const zong = await reqgetZong()
+      commit("GET_ZONG", zong)
+    }
   },
   mutations: {
     GET_CATEGORY_LIST (state, categoryList) {
@@ -64,6 +82,15 @@ export default {
     },
     GET_FU (state, fu) {
       state.fu = fu
+    },
+    GET_BRAND (state, brand) {
+      state.brand = brand
+    },
+    GET_BANNER (state, banner) {
+      state.banner = banner
+    },
+    GET_ZONG (state, zong) {
+      state.zong = zong
     }
   }
 }

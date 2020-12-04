@@ -14,61 +14,19 @@
           </h4>
           <div class="clearix"></div>
           <ul class="news-list unstyled">
+            <li v-for="banner in banner" :key="banner.id">
+              <span class="bold">[{{ banner.title }}]</span>{{ banner.text }}
+            </li>
+            <!-- <li><span class="bold">[公告]</span>备战开学季 全民半价购数码</li>
             <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li>
             <li><span class="bold">[公告]</span>备战开学季 全民半价购数码</li>
-            <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li>
-            <li><span class="bold">[公告]</span>备战开学季 全民半价购数码</li>
-            <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li>
+            <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li> -->
           </ul>
         </div>
         <ul class="lifeservices">
-          <li class="life-item">
+          <li class="life-item" v-for="zong in zong" :key="zong.id">
             <i class="list-item"></i>
-            <span class="service-intro">话费</span>
-          </li>
-          <li class="life-item">
-            <i class="list-item"></i>
-            <span class="service-intro">机票</span>
-          </li>
-          <li class="life-item">
-            <i class="list-item"></i>
-            <span class="service-intro">电影票</span>
-          </li>
-          <li class="life-item">
-            <i class="list-item"></i>
-            <span class="service-intro">游戏</span>
-          </li>
-          <li class="life-item">
-            <i class="list-item"></i>
-            <span class="service-intro">彩票</span>
-          </li>
-          <li class="life-item">
-            <i class="list-item"></i>
-            <span class="service-intro">加油站</span>
-          </li>
-          <li class="life-item">
-            <i class="list-item"></i>
-            <span class="service-intro">酒店</span>
-          </li>
-          <li class="life-item">
-            <i class="list-item"></i>
-            <span class="service-intro">火车票</span>
-          </li>
-          <li class="life-item">
-            <i class="list-item"></i>
-            <span class="service-intro">众筹</span>
-          </li>
-          <li class="life-item">
-            <i class="list-item"></i>
-            <span class="service-intro">理财</span>
-          </li>
-          <li class="life-item">
-            <i class="list-item"></i>
-            <span class="service-intro">礼品卡</span>
-          </li>
-          <li class="life-item">
-            <i class="list-item"></i>
-            <span class="service-intro">白条</span>
+            <span class="service-intro">{{ zong.tltle }}</span>
           </li>
         </ul>
         <div class="ads">
@@ -90,14 +48,18 @@ export default {
   computed: {
     ...mapState({
       banners: (state) => state.home.banners,
+      banner: (state) => state.home.banner,
+      zong: (state) => state.home.zong,
     }),
   },
   methods: {
-    ...mapActions(['getGetBanners']),
+    ...mapActions(['getGetBanners', 'getBanner', 'getZong']),
   },
   async mounted() {
     // 1.getGetBanners是去请求我们的轮播图数据，是一个异步的请求，所以需要先请求到数据，然后我们再去new swiper，
     await this.getGetBanners()
+    await this.getBanner()
+    await this.getZong()
 
     //2.数据请求到了，但是new Swiper的前提：必须先生成相应的DOM结构，所以必须又要有DOM结构，更新用户界面都是异步的，所以要等同步全部执行完，在去更新，所以new swiper就必须是一个异步的，DOM元素渲染是同步的，所以第一种方案给之设定一个计时器
     // 方案二：
