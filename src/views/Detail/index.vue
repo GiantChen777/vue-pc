@@ -20,9 +20,22 @@
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <Zoom />
+
+          <Zoom
+            :imgUrl="
+              skuInfo.skuImageList[subscript] &&
+              skuInfo.skuImageList[subscript].imgUrl
+            "
+            :BigimgUrl="
+              skuInfo.skuImageList[subscript] &&
+              skuInfo.skuImageList[subscript].imgUrl
+            "
+          />
           <!-- 小图列表 -->
-          <ImageList />
+          <ImageList
+            :skuImageList="skuInfo.skuImageList"
+            :setSubscript="setSubscript"
+          />
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
@@ -347,6 +360,12 @@ import Zoom from './Zoom/Zoom'
 
 export default {
   name: 'Detail',
+  data() {
+    return {
+      // 设置当前选中图片的下表
+      subscript: 0,
+    }
+  },
   components: {
     ImageList,
     Zoom,
@@ -357,6 +376,10 @@ export default {
   },
   methods: {
     ...mapActions(['getProductDetail']),
+    // 设置传递下标图片的方法
+    setSubscript(index) {
+      this.subscript = index
+    },
   },
   mounted() {
     // 需要传id

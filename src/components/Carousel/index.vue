@@ -29,7 +29,7 @@
 // 引入swpier轮播图插件
 import Swiper from 'swiper'
 // 引入swiper样式
-import 'swiper/swiper-bundle.css'
+// import 'swiper/swiper-bundle.css'
 // core version + navigation, pagination modules:
 import { Navigation, Pagination, Autoplay } from 'swiper'
 // configure Swiper to use modules

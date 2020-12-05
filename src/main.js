@@ -10,6 +10,7 @@ import './mock/mockServe';
 // 引入公共资源样式
 import "./style/reset.css"
 import "./style/iconfont.css"
+import "swiper/swiper-bundle.min.css";
 
 import './plugins/element.js'
 
