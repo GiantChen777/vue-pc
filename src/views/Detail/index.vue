@@ -108,11 +108,17 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
+                <!-- <input autocomplete="off" class="itxt" />
                 <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <a href="javascript:" class="mins">-</a> -->
+                <el-input-number
+                  v-model="skuNum"
+                  controls-position="right"
+                  :min="1"
+                  :max="10"
+                ></el-input-number>
               </div>
-              <div class="add">
+              <div class="add" @click="addCart">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -364,6 +370,7 @@ export default {
     return {
       // 设置当前选中图片的下表
       subscript: 0,
+      skuNum: 1, //商品数量的初始值
     }
   },
   components: {
@@ -375,10 +382,20 @@ export default {
     ...mapGetters(['categoryView', 'skuInfo', 'spuSaleAttrList']),
   },
   methods: {
-    ...mapActions(['getProductDetail']),
+    ...mapActions(['getProductDetail', 'UpdateCartCount']),
     // 设置传递下标图片的方法
     setSubscript(index) {
       this.subscript = index
+    },
+    // 点击之后加入购物车，需要发送请求
+    // this.UpdateCartCount是一个异步请求，需要等待请求完成，才进行跳转，所以需要一个await和async
+    async addCart() {
+      await this.UpdateCartCount({
+        skuId: this.skuInfo.id,
+        skuNum: this.skuNum,
+      })
+      // 一旦加入购物车，跳转到加入购物车成功页面
+      this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`)
     },
   },
   mounted() {
@@ -593,7 +610,7 @@ export default {
 
             .add {
               float: left;
-
+              margin-left: 100px;
               a {
                 background-color: #e1251b;
                 padding: 0 25px;

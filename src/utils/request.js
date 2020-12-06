@@ -8,10 +8,18 @@ import "nprogress/nprogress.css"
 // 单独引入element.ui组件
 import { Message } from 'element-ui';
 
+// 引入我们生成uuid的方法
+import getuserTempId from "@utils/getuserTempId"
+
+// 调用方法，生成userTempId，
+// 定义一个变量，让内存中进行读取，这样性能就会比在硬盘、磁盘中读取速度会更快
+const userTempId = getuserTempId();
+
 const instance = axios.create({
   baseURL: "/api",//公共基础路劲
   headers: {
     // 放置公共请求参数
+
   }
 })
 
@@ -22,6 +30,9 @@ instance.interceptors.request.use(
     // 将来请求的地址，请求参数，请求方式等，都会在config中找
     //开始进度条
     NProgress.start();
+
+    config.headers.userTempId = userTempId;
+
     return config
   }
 )
@@ -48,7 +59,7 @@ instance.interceptors.response.use(
     NProgress.done();
     const message = err.message || "网络错误";
     // 提示失败信息(element.ui组件的)
-    Message.error(  )
+    Message.error()
     return Promise.reject(message)
   }
 )
