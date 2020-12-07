@@ -1,11 +1,15 @@
 <template>
   <div class="spec-preview">
+    <!-- 中图区域 -->
     <img :src="imgUrl" />
-    <div class="event"></div>
+    <!-- <div class="event" @mousemove="move" ref="event"></div> -->
+    <div class="event" @mousemove="move"></div>
+    <!-- 大图区域 -->
     <div class="big">
-      <img :src="BigimgUrl" />
+      <img :src="BigimgUrl" ref="bigImg" />
     </div>
-    <div class="mask"></div>
+    <!-- 绿色的遮罩层 -->
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
@@ -16,11 +20,59 @@ export default {
     imgUrl: String,
     BigimgUrl: String,
   },
-/*   methods: {
-    mouse(e) {
-      console.log(e)
+  methods: {
+    move(event) {
+      let left, top
+      const mask = this.$refs.mask
+      const bigImg = this.$refs.bigImg
+      // 获取事件的offsetX/offsetY,maskDiv的宽度maskWidth
+      const { offsetX, offsetY } = event
+      // 计算left、top
+      left = offsetX - 100
+      top = offsetY - 100
+      // left和top必须在[0, maskWidth]区间内
+      if (left < 0) {
+        left = 0
+      } else if (left > 200) {
+        left = 200
+      }
+      if (top < 0) {
+        top = 0
+      } else if (top > 200) {
+        top = 200
+      }
+
+      // 指定mask <div>的坐标值(left, top)
+      mask.style.left = left + 'px'
+      mask.style.top = top + 'px'
+      // 指定大图 <img>的坐标值(left, top)
+      bigImg.style.left = -2 * left + 'px'
+      bigImg.style.top = -2 * top + 'px'
     },
-  }, */
+    /* move(e) {
+      let x = e.offsetX - 100
+      let y = e.offsetY - 100
+      // console.log(x);
+      // console.log(y);
+      if (x <= 0) {
+        x = 0
+      }
+      if (x >= 200) {
+        x = 200
+      }
+      if (y >= 200) {
+        y = 200
+      }
+      if (y <= 0) {
+        y = 0
+      }
+
+      this.$refs.mask.style.left = x + 'px'
+      this.$refs.mask.style.top = y + 'px'
+      this.$refs.bigImg.style.left = -2 * x + 'px'
+      this.$refs.bigImg.style.top = -2 * y + 'px'
+    }, */
+  },
 }
 </script>
 

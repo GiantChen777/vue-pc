@@ -4,9 +4,15 @@
       <div class="header-top">
         <div class="header-login-list">
           <p>尚品汇欢迎您！</p>
-          <span>请</span>
-          <router-link to="/login">登录</router-link>
-          <router-link to="/register" class="register">免费注册</router-link>
+          <p v-if="$store.state.user.name">
+            <span>{{ $store.state.user.name }}</span>
+            <button @click="deltoken">退出</button>
+          </p>
+          <p v-else>
+            <span>请</span>
+            <router-link to="/login">登录</router-link>
+            <router-link to="/register" class="register">免费注册</router-link>
+          </p>
         </div>
         <div class="header-type-list">
           <ul>
@@ -96,6 +102,9 @@ export default {
       } else {
         this.$router.push(location)
       }
+    },
+    deltoken() {
+      // 点击退出按钮，发送请求，删除token和name，然后退出到login页面
     },
   },
   mounted() {

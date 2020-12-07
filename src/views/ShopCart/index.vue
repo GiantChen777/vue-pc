@@ -25,12 +25,14 @@
             <span class="price">{{ item.cartPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a
+            <button
               href="javascript:void(0)"
               class="mins"
               @click="addNum(item.skuId, -1)"
-              >-</a
+              :disabled="item.skuNum === 1"
             >
+              -
+            </button>
             <input
               autocomplete="off"
               type="text"
@@ -39,18 +41,20 @@
               class="itxt"
             />
             <!-- 定义一个加减数量的方法，需要发送请求，接收传参 -->
-            <a
+            <button
               href="javascript:void(0)"
               class="plus"
               @click="addNum(item.skuId, 1)"
-              >+</a
+              :disabled="item.skuNum === 10"
             >
+              +
+            </button>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ item.skuNum * item.skuPrice }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a class="sindelet" @click="delList(item.skuId)">删除</a>
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -117,10 +121,16 @@ export default {
     }),
   },
   methods: {
-    ...mapActions(['getCartList', 'UpdateCartCount']),
+    ...mapActions(['getCartList', 'UpdateCartCount', 'gelCart']),
     // 调用actions方法更新商品数据并且重新刷新页面，
     addNum(skuId, skuNum) {
       this.UpdateCartCount({ skuId, skuNum })
+    },
+    // 删除选中的数据
+    delList(skuId) {
+      if (window.confirm(`您确认删除的是这个数据嘛？`)) {
+        this.gelCart(skuId)
+      }
     },
   },
   mounted() {

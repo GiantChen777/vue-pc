@@ -1,4 +1,4 @@
-import { reqGetCartList, reqUpdateCartCount } from "@api/shotcart"
+import { reqGetCartList, reqUpdateCartCount, reqDelCart } from "@api/shotcart"
 export default {
   state: {
     cartList: []   //购物车所有的数据
@@ -10,11 +10,21 @@ export default {
       const cartList = await reqGetCartList()
       commit('GET_CARTLIST', cartList)
     },
-    // 定义加入购物车的方法，添加或者删除购物车的方法堵在这个方法中
+    // 定义加入购物车的方法，添加或者减少购物车的方法堵在这个方法中
     async UpdateCartCount ({ commit }, { skuId, skuNum }) {
       await reqUpdateCartCount(skuId, skuNum)
       commit("UPDATE_CARTCOUNT", { skuId, skuNum })
     },
+    // 定义删除购物车数据的方法
+    async gelCart ({ commit }, skuId) {
+      await reqDelCart(skuId)
+      commit("GEL_CART", skuId)
+    },
+    /*  // 定义切换商品选中状态
+     async UpdateCartCheck ({ commit }, { skuId, isChecked }) {
+       await reqUpdateCartCheck(skuId, isChecked)
+       commit("UPDATE_CARTCHECK", { skuId, isChecked })
+     }, */
   },
   mutations: {
     GET_CARTLIST (state, cartList) {
@@ -28,6 +38,19 @@ export default {
         }
         return item
       })
-    }
+    },
+    GEL_CART (state, skuId) {
+      state.cartList = state.cartList.filter((item) => {
+        return item.skuId !== skuId
+      })
+    },
+    /*     UPDATE_CARTCHECK (state, { skuId, isChecked }) {
+          state.cartList = state.cartList.map((item) => {
+            if (item.skuId === skuId) {
+              item.isChecked = isChecked
+            }
+            return item
+          })
+        } */
   }
 }
