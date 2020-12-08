@@ -5,11 +5,15 @@ import NProgress from "nprogress"
 // 引入nprogress，直接从这个插件上面引入css样式
 import "nprogress/nprogress.css"
 
+// store就是vuex的store，也是this.$store
+import store from "../store";
+
 // 单独引入element.ui组件
 import { Message } from 'element-ui';
 
 // 引入我们生成uuid的方法
 import getuserTempId from "@utils/getuserTempId"
+// import store from "../store"
 
 // 调用方法，生成userTempId，
 // 定义一个变量，让内存中进行读取，这样性能就会比在硬盘、磁盘中读取速度会更快
@@ -31,6 +35,11 @@ instance.interceptors.request.use(
     //开始进度条
     NProgress.start();
 
+    // 修改config，用来添加公共的请求参数
+    const token = store.state.user.token;
+    if (token) {
+      config.headers.token = token;
+    }
     config.headers.userTempId = userTempId;
 
     return config

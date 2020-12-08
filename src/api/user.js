@@ -32,3 +32,13 @@ export const reqRegister = ({ phone, password, code }) => {
   })
 }
 
+// 退出登录的api接口请求
+export const reqGetLogout = () => {
+  // request是拦截器，拦截不必要的数据，只响应我们需要的数据
+  return request({
+    // 里面是配置对象
+    method: "GET",
+    url: "/user/passport/logout",
+  })
+}
+

@@ -13,7 +13,12 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="item in cartList" :key="item.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="item.isChecked" />
+            <input
+              type="checkbox"
+              name="chk_list"
+              :checked="item.isChecked === 1"
+              @change="checkCartItem(item)"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="item.imgUrl" />
@@ -33,12 +38,14 @@
             >
               -
             </button>
+            <!-- 给input绑定失去焦点事件，发送请求 -->
             <input
               autocomplete="off"
               type="text"
               :value="item.skuNum"
               minnum="1"
               class="itxt"
+              @blur="update(item.skuId, item.skuNum, $event)"
             />
             <!-- 定义一个加减数量的方法，需要发送请求，接收传参 -->
             <button
@@ -81,7 +88,7 @@
           <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <router-link class="sum-btn" to="/trade">结算</router-link>
         </div>
       </div>
     </div>
@@ -130,6 +137,43 @@ export default {
     delList(skuId) {
       if (window.confirm(`您确认删除的是这个数据嘛？`)) {
         this.gelCart(skuId)
+      }
+    },
+    /*  // 清空去掉里面所有的非数字的函数
+    formatskuNum(e) {
+      let skuNum = +e.target.value.replace(/\D+/g, '')
+      if (skuNum < 1) {
+        // 商品数量不能小于1
+        skuNum = 1
+      } else if (skuNum > 10) {
+        // 商品数量不能大于库存
+        skuNum = 10
+      }
+      e.target.value = skuNum
+      e.target.value = skuNum
+      // this.cartList.find((item) => item.skuId === skuId).skuNum = skuNum
+    }, */
+    // 更改input里面的数字，失去焦点的时候发送请求
+    update(skuId, skuNum, e) {
+      this.UpdateCartCount({ skuId, skuNum: e.target.value - skuNum })
+    },
+    // 更新数据库里面的单选选中状态
+    async checkCartItem(item) {
+      // 获取数据
+      const skuId = item.skuId
+      const isChecked = item.isChecked === 1 ? '0' : '1'
+      console.log(skuId, isChecked)
+      try {
+        // 获取数据之后发送请求
+        await this.$store.dispatch('UpdateCartCheck', {
+          skuId,
+          isChecked,
+        })
+
+        //  如果成功了，重新获取购物车数据显示
+        this.$store.dispatch('getCartList')
+      } catch (error) {
+        console.log(error)
       }
     },
   },

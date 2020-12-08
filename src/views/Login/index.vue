@@ -17,22 +17,24 @@
             <form @submit.prevent="submit">
               <ValidationProvider rules="required|length" v-slot="{ errors }">
                 <div class="input-text clearFix">
-                  <span>{{ errors[0] }}</span>
+                  <span></span>
                   <input
                     type="text"
                     placeholder="邮箱/用户名/手机号"
                     v-model="user.phone"
                   />
+                  <p :style="{ color: 'red' }">{{ errors[0] }}</p>
                 </div>
               </ValidationProvider>
               <ValidationProvider rules="word" v-slot="{ errors }">
                 <div class="input-text clearFix">
-                  <span class="pwd">{{ errors[0] }}</span>
+                  <span class="pwd"></span>
                   <input
                     type="text"
                     placeholder="请输入密码"
                     v-model="user.password"
                   />
+                  <p :style="{ color: 'red' }">{{ errors[0] }}</p>
                 </div>
               </ValidationProvider>
               <div class="setting clearFix">

@@ -1,4 +1,4 @@
-import { reqGetCartList, reqUpdateCartCount, reqDelCart } from "@api/shotcart"
+import { reqGetCartList, reqUpdateCartCount, reqDelCart, reqUpdateCartCheck } from "@api/shotcart"
 export default {
   state: {
     cartList: []   //购物车所有的数据
@@ -20,11 +20,15 @@ export default {
       await reqDelCart(skuId)
       commit("GEL_CART", skuId)
     },
-    /*  // 定义切换商品选中状态
-     async UpdateCartCheck ({ commit }, { skuId, isChecked }) {
-       await reqUpdateCartCheck(skuId, isChecked)
-       commit("UPDATE_CARTCHECK", { skuId, isChecked })
-     }, */
+    // 定义切换商品选中状态
+    // skuId: 商品的ID
+    // isChecked: 商品选中状态, '0'代表不选中, '1'代表选中
+    async UpdateCartCheck ({ commit }, { skuId, isChecked }) {
+      console.log(skuId, isChecked)
+      await reqUpdateCartCheck(skuId, isChecked)
+      //  commit("UPDATE_CARTCHECK", { skuId, isChecked })
+      console.log(commit)
+    },
   },
   mutations: {
     GET_CARTLIST (state, cartList) {
@@ -44,13 +48,13 @@ export default {
         return item.skuId !== skuId
       })
     },
-    /*     UPDATE_CARTCHECK (state, { skuId, isChecked }) {
-          state.cartList = state.cartList.map((item) => {
-            if (item.skuId === skuId) {
-              item.isChecked = isChecked
-            }
-            return item
-          })
-        } */
+    /*      UPDATE_CARTCHECK (state, { skuId, isChecked }) {
+              state.cartList = state.cartList.map((item) => {
+                if (item.skuId === skuId) {
+                  item.isChecked = isChecked
+                }
+                return item
+              })
+        }  */
   }
 }

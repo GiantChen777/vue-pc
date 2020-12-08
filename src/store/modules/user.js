@@ -1,5 +1,5 @@
 // 定义请求去跳转到login页面
-import { reqRegister, reqLogin } from "@api/user"
+import { reqRegister, reqLogin, reqGetLogout } from "@api/user"
 
 export default {
   state: {
@@ -15,12 +15,20 @@ export default {
     async login ({ commit }, { phone, password }) {
       const user = await reqLogin({ phone, password })
       commit("LOGIN", user)
+    },
+    async loginout ({ commit }) {
+      await reqGetLogout()
+      commit("LOG_INOUT")
     }
   },
   mutations: {
     LOGIN (state, user) {
       state.name = user.name,
         state.token = user.token
+    },
+    LOG_INOUT (state) {
+      state.name = '',
+        state.token = ''
     }
   },
 }

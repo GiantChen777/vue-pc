@@ -103,8 +103,14 @@ export default {
         this.$router.push(location)
       }
     },
-    deltoken() {
+    async deltoken() {
       // 点击退出按钮，发送请求，删除token和name，然后退出到login页面
+      await this.$store.dispatch('loginout')
+      if (window.confirm('您确认要退出当前用户嘛')) {
+        localStorage.removeItem('name')
+        localStorage.removeItem('token')
+        this.$router.replace('/login')
+      }
     },
   },
   mounted() {
