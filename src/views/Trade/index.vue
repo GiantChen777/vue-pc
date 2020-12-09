@@ -63,6 +63,7 @@
         <textarea
           placeholder="建议留言前先与商家沟通确认"
           class="remarks-cont"
+          v-model="orderComment"
         ></textarea>
       </div>
       <div class="line"></div>
@@ -103,13 +104,14 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <!-- <button class="subBtn">提交订单</button> -->
+      <button class="subBtn" @click="submit">提交订单</button>
     </div>
   </div>
 </template>
 
 <script>
-import { reqGetpayDate } from '@api/pay'
+import { reqGetpayDate, reqGetsubmitOrder } from '@api/pay'
 
 export default {
   name: 'Trade',
@@ -118,6 +120,7 @@ export default {
       trade: {},
       // 1.一开始让两者的都没有选中的状态
       isselected: -1,
+      orderComment: '',
     }
   },
   async mounted() {
@@ -135,6 +138,28 @@ export default {
       return this.trade.userAddressList
         ? this.trade.userAddressList.find((item) => item.id === this.isselected)
         : {}
+    },
+  },
+  methods: {
+    async submit() {
+      const { tradeNo, detailArrayList } = this.trade
+      const { phoneNum, userAddress, consignee } = this.isselect
+      // 点击发送这个请求，有一个返回值，是提交订单需要发送的订单号
+      const orderId = await reqGetsubmitOrder({
+        tradeNo,
+        consignee: consignee,
+        consigneeTel: phoneNum,
+        deliveryAddress: userAddress,
+        paymentWay: 'ONLINE',
+        orderComment: this.orderComment,
+        orderDetailList: detailArrayList,
+      })
+      this.$router.push({
+        path: '/pay',
+        query: {
+          orderId,
+        },
+      })
     },
   },
 }

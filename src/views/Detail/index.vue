@@ -395,7 +395,7 @@ export default {
         skuNum: this.skuNum,
       })
       // 一旦加入购物车，跳转到加入购物车成功页面
-      this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`)
+      this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}&skuId=${this.$route.params.id}`)
     },
   },
   mounted() {

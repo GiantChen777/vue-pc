@@ -4,7 +4,7 @@
     <div class="swiper-wrapper">
       <div class="swiper-slide" v-for="banner in carouselList" :key="banner.id">
         <!-- <img src="./images/banner1.jpg" /> -->
-        <img :src="banner.imgUrl" />
+        <img v-lazy="banner.imgUrl" />
       </div>
       <!-- <div class="swiper-slide">
               <img src="./images/banner2.jpg" />

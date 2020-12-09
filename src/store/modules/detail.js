@@ -22,6 +22,7 @@ export default {
       return state.productDetail.spuSaleAttrList;
     },
   },
+  
   actions: {
     async getProductDetail ({ commit }, id) {
       const productDetail = await reqGetProductDetail(id);

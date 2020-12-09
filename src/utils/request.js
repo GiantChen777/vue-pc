@@ -19,8 +19,12 @@ import getuserTempId from "@utils/getuserTempId"
 // 定义一个变量，让内存中进行读取，这样性能就会比在硬盘、磁盘中读取速度会更快
 const userTempId = getuserTempId();
 
+// 通过打印其值来区分运行环境
+console.log(process.env.NODE_ENV)
+const prefix_url = process.env.NODE_ENV === "development" ? "/" : "http://182.92.128.115/";
+
 const instance = axios.create({
-  baseURL: "/api",//公共基础路劲
+  baseURL: `${prefix_url}api`,//公共基础路劲
   headers: {
     // 放置公共请求参数
 

@@ -13,6 +13,7 @@ import "./style/iconfont.css"
 import "swiper/swiper-bundle.min.css";
 
 import './plugins/element.js'
+import './plugins/loading.js'
 
 Vue.config.productionTip = false
 

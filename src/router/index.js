@@ -2,17 +2,29 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store"
 
-import Home from "../views/Home"
-import Register from "../views/Register"
-import Login from "../views/Login"
-import Search from "../views/Search"
-import Detail from "../views/Detail"
-import AddCartSuccess from "../views/AddCartSuccess"
-import ShopCart from "../views/ShopCart"
-import Trade from "../views/Trade"
-import Pay from "../views/Pay"
-import PaySuccess from "../views/PaySuccess"
-import Center from "../views/Center"
+//路由组件懒加载
+const Home = () => import(/* webpackChunkName: "Home" */ '../views/Home')
+const Register = () => import(/* webpackChunkName: "Register" */ '../views/Register')
+const Login = () => import(/* webpackChunkName: "Register" */ '../views/Login')
+const Search = () => import(/* webpackChunkName: "Search" */ '../views/Search')
+const Detail = () => import(/* webpackChunkName: "Detail" */ '../views/Detail')
+const AddCartSuccess = () => import(/* webpackChunkName: "AddCartSuccess" */ '../views/AddCartSuccess')
+const ShopCart = () => import(/* webpackChunkName: "ShopCart" */ '../views/ShopCart')
+const Trade = () => import(/* webpackChunkName: "Trade" */ '../views/Trade')
+const Pay = () => import(/* webpackChunkName: "Pay" */ '../views/Pay')
+const PaySuccess = () => import(/* webpackChunkName: "PaySuccess" */ '../views/PaySuccess')
+const Center = () => import(/* webpackChunkName: "Center" */ '../views/Center')
+// import Home from "../views/Home"
+// import Register from "../views/Register"
+// import Login from "../views/Login"
+// import Search from "../views/Search"
+// import Detail from "../views/Detail"
+// import AddCartSuccess from "../views/AddCartSuccess"
+// import ShopCart from "../views/ShopCart"
+// import Trade from "../views/Trade"
+// import Pay from "../views/Pay"
+// import PaySuccess from "../views/PaySuccess"
+// import Center from "../views/Center"
 
 //安装插件
 Vue.use(VueRouter)
@@ -38,7 +50,9 @@ VueRouter.prototype.replace = function (loaclhost, onComplete, onAbort) {
 
 //导出
 const router = new VueRouter({
-
+  // 路由模式
+  // mode:"hash"
+  mode: "history",
   routes: [
     {
       path: "/",
